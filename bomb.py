@@ -137,34 +137,42 @@ def  flood_fill(y,x):
         if(chess[y][x+1] == ' ' and appear_chess[y][x+1]!=' '):
             btn[y][x+1].config(text=chess[y][x+1], bg='GhostWhite')
             appear_chess[y][x+1] = chess[y][x+1]
+            the_game[y][x + 1] = chess[y][x + 1]
             flood_fill(y,x+1)
         elif(chess[y][x+1] != ' ' and chess[y][x+1]!='💣' ):
             btn[y][x + 1].config(text=chess[y][x + 1], bg='GhostWhite')
             appear_chess[y][x + 1] = chess[y][x + 1]
+            the_game[y][x + 1] = chess[y][x + 1]
     if(x > 0):
         if(chess[y][x-1]==' ' and appear_chess[y][x-1] != ' '):
             btn[y][x-1].config(text=chess[y][x-1], bg='GhostWhite')
             appear_chess[y][x-1] = chess[y][x-1]
+            the_game[y][x-1] = chess[y][x-1]
             flood_fill(y,x-1)
         elif (chess[y][x-1]!= ' ' and chess[y][x-1]!= '💣'):
             btn[y][x-1].config(text=chess[y][x-1], bg='GhostWhite')
             appear_chess[y][x-1] = chess[y][x-1]
+            the_game[y][x - 1] = chess[y][x - 1]
     if (y < game_Y_size - 1):
         if (chess[y + 1][x] == ' ' and appear_chess[y + 1][x]!= ' '):
             btn[y + 1][x].config(text=chess[y + 1][x], bg='GhostWhite')
             appear_chess[y + 1][x] = chess[y + 1][x]
+            the_game[y + 1][x] = chess[y + 1][x]
             flood_fill(y + 1, x)
         elif (chess[y + 1][x]!= ' ' and chess[y + 1][x]!= '💣'):
             btn[y + 1][x].config(text=chess[y + 1][x], bg='GhostWhite')
             appear_chess[y + 1][x]= chess[y + 1][x]
+            the_game[y + 1][x] = chess[y + 1][x]
     if(y > 0):
         if(chess[y - 1][x] == ' ' and appear_chess[y - 1][x]!= ' '):
             btn[y-1][x].config(text=chess[y-1][x], bg='GhostWhite')
             appear_chess[y-1][x] = chess[y-1][x]
+            the_game[y - 1][x] = chess[y - 1][x]
             flood_fill(y-1,x)
         elif (chess[y-1][x]!= ' ' and chess[y-1][x]!= '💣'):
             btn[y-1][x].config(text=chess[y-1][x], bg='GhostWhite')
             appear_chess[y-1][x]= chess[y-1][x]
+            the_game[y - 1][x] = chess[y - 1][x]
 '''========================================================='''
 begin=0
 def play(event,x,y):
@@ -189,10 +197,11 @@ def play(event,x,y):
             for ay in range(game_Y_size):
                 for ax in range(game_X_size):
                     if(the_game[ay][ax]=='🚩' and chess[ay][ax]!='💣'):
-                        btn[ay][ax].config(text='❌')
+                        btn[ay][ax].config(text='❌',bg='Magenta')
                     elif(chess[ay][ax]=='💣'):
                         if(the_game[ay][ax]!='🚩'):
                             btn[ay][ax].config(text=chess[ay][ax],bg='GhostWhite')
+            btn[y][x].config(text=chess[y][x], bg='Red')
             change_smile.set('😱')
     # print(appear_chess)
 def handlerAdaptor(fun, **kwds):
@@ -229,9 +238,9 @@ remain_bomb.set(str(bomb_number_cnt))
 labelText = StringVar()
 labelText.set(str(counter))
 def new_play_game():
-    Label(window, textvariable=remain_bomb,font='80',height='3',bg='skyblue').grid(row = 0,column =0)
-    Label(window, textvariable=labelText,font='80',height='3',bg='skyblue').grid(row = 0,column = game_X_size-1)
-    smile=Button(window,textvariable=change_smile,font='100',bg='GhostWhite')
+    Label(window, textvariable=remain_bomb,font='160',height='3',bg='skyblue').grid(row = 0,column =0)
+    Label(window, textvariable=labelText,font='160',height='3',bg='skyblue').grid(row = 0,column = game_X_size-1)
+    smile=Button(window,textvariable=change_smile,font='160',bg='Snow')
     smile.bind("<Button-1>",smile_do)#左鍵
     smile.grid(row = 0,column = int(game_X_size/2))
 new_play_game()
