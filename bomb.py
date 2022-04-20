@@ -143,6 +143,26 @@ def  flood_fill(y,x):
             btn[y][x + 1].config(text=chess[y][x + 1], bg='GhostWhite')
             appear_chess[y][x + 1] = chess[y][x + 1]
             the_game[y][x + 1] = chess[y][x + 1]
+            if (y > 0 and x > 0):
+                if (chess[y - 1][x - 1] != ' ' and chess[y - 1][x - 1] != '💣'):
+                    btn[y - 1][x - 1].config(text=chess[y - 1][x - 1], bg='GhostWhite')
+                    appear_chess[y - 1][x - 1] = chess[y - 1][x - 1]
+                    the_game[y - 1][x - 1] = chess[y - 1][x - 1]
+            if (x < game_X_size - 1 and y < game_Y_size - 1):
+                if (chess[y + 1][x + 1] != ' ' and chess[y + 1][x + 1] != '💣'):
+                    btn[y + 1][x + 1].config(text=chess[y + 1][x + 1], bg='GhostWhite')
+                    appear_chess[y + 1][x + 1] = chess[y + 1][x + 1]
+                    the_game[y + 1][x + 1] = chess[y + 1][x + 1]
+            if (x > 0 and y < game_Y_size - 1):
+                if (chess[y + 1][x - 1] != ' ' and chess[y + 1][x - 1] != '💣'):
+                    btn[y + 1][x - 1].config(text=chess[y + 1][x - 1], bg='GhostWhite')
+                    appear_chess[y + 1][x - 1] = chess[y + 1][x - 1]
+                    the_game[y + 1][x - 1] = chess[y + 1][x - 1]
+            if (y > 0 and x < game_X_size - 1):
+                if (chess[y - 1][x + 1] != ' ' and chess[y - 1][x + 1] != '💣'):
+                    btn[y - 1][x + 1].config(text=chess[y - 1][x + 1], bg='GhostWhite')
+                    appear_chess[y - 1][x + 1] = chess[y - 1][x + 1]
+                    the_game[y - 1][x + 1] = chess[y - 1][x + 1]
     if(x > 0):
         if(chess[y][x-1]==' ' and appear_chess[y][x-1] != ' '):
             btn[y][x-1].config(text=chess[y][x-1], bg='GhostWhite')
@@ -153,6 +173,26 @@ def  flood_fill(y,x):
             btn[y][x-1].config(text=chess[y][x-1], bg='GhostWhite')
             appear_chess[y][x-1] = chess[y][x-1]
             the_game[y][x - 1] = chess[y][x - 1]
+            if(y>0 and x>0):
+                if (chess[y - 1][x - 1] != ' ' and chess[y - 1][x - 1]  != '💣'):
+                    btn[y - 1][x - 1] .config(text=chess[y - 1][x - 1] , bg='GhostWhite')
+                    appear_chess[y - 1][x - 1]  = chess[y - 1][x - 1]
+                    the_game[y - 1][x - 1]  = chess[y - 1][x - 1]
+            if(x<game_X_size-1 and y<game_Y_size-1):
+                if (chess[y + 1][x + 1] != ' ' and chess[y + 1][x + 1] != '💣'):
+                    btn[y + 1][x + 1].config(text=chess[y + 1][x + 1], bg='GhostWhite')
+                    appear_chess[y + 1][x + 1] = chess[y + 1][x + 1]
+                    the_game[y + 1][x + 1] = chess[y + 1][x + 1]
+            if (x > 0 and y<game_Y_size-1):
+                if (chess[y + 1][x - 1] != ' ' and chess[y + 1][x - 1] != '💣'):
+                    btn[y + 1][x - 1].config(text=chess[y + 1][x - 1], bg='GhostWhite')
+                    appear_chess[y + 1][x - 1] = chess[y + 1][x - 1]
+                    the_game[y + 1][x - 1] = chess[y + 1][x - 1]
+            if (y > 0 and x<game_X_size-1):
+                if (chess[y - 1][x + 1] != ' ' and chess[y - 1][x + 1] != '💣'):
+                    btn[y - 1][x + 1].config(text=chess[y - 1][x + 1], bg='GhostWhite')
+                    appear_chess[y - 1][x + 1] = chess[y - 1][x + 1]
+                    the_game[y - 1][x + 1] = chess[y - 1][x + 1]
     if (y < game_Y_size - 1):
         if (chess[y + 1][x] == ' ' and appear_chess[y + 1][x]!= ' '):
             btn[y + 1][x].config(text=chess[y + 1][x], bg='GhostWhite')
@@ -163,6 +203,26 @@ def  flood_fill(y,x):
             btn[y + 1][x].config(text=chess[y + 1][x], bg='GhostWhite')
             appear_chess[y + 1][x]= chess[y + 1][x]
             the_game[y + 1][x] = chess[y + 1][x]
+            if (y > 0 and x > 0):
+                if (chess[y - 1][x - 1] != ' ' and chess[y - 1][x - 1] != '💣'):
+                    btn[y - 1][x - 1].config(text=chess[y - 1][x - 1], bg='GhostWhite')
+                    appear_chess[y - 1][x - 1] = chess[y - 1][x - 1]
+                    the_game[y - 1][x - 1] = chess[y - 1][x - 1]
+            if (x < game_X_size - 1 and y < game_Y_size - 1):
+                if (chess[y + 1][x + 1] != ' ' and chess[y + 1][x + 1] != '💣'):
+                    btn[y + 1][x + 1].config(text=chess[y + 1][x + 1], bg='GhostWhite')
+                    appear_chess[y + 1][x + 1] = chess[y + 1][x + 1]
+                    the_game[y + 1][x + 1] = chess[y + 1][x + 1]
+            if (x > 0 and y < game_Y_size - 1):
+                if (chess[y + 1][x - 1] != ' ' and chess[y + 1][x - 1] != '💣'):
+                    btn[y + 1][x - 1].config(text=chess[y + 1][x - 1], bg='GhostWhite')
+                    appear_chess[y + 1][x - 1] = chess[y + 1][x - 1]
+                    the_game[y + 1][x - 1] = chess[y + 1][x - 1]
+            if (y > 0 and x < game_X_size - 1):
+                if (chess[y - 1][x + 1] != ' ' and chess[y - 1][x + 1] != '💣'):
+                    btn[y - 1][x + 1].config(text=chess[y - 1][x + 1], bg='GhostWhite')
+                    appear_chess[y - 1][x + 1] = chess[y - 1][x + 1]
+                    the_game[y - 1][x + 1] = chess[y - 1][x + 1]
     if(y > 0):
         if(chess[y - 1][x] == ' ' and appear_chess[y - 1][x]!= ' '):
             btn[y-1][x].config(text=chess[y-1][x], bg='GhostWhite')
@@ -173,6 +233,27 @@ def  flood_fill(y,x):
             btn[y-1][x].config(text=chess[y-1][x], bg='GhostWhite')
             appear_chess[y-1][x]= chess[y-1][x]
             the_game[y - 1][x] = chess[y - 1][x]
+            if (y > 0 and x > 0):
+                if (chess[y - 1][x - 1] != ' ' and chess[y - 1][x - 1] != '💣'):
+                    btn[y - 1][x - 1].config(text=chess[y - 1][x - 1], bg='GhostWhite')
+                    appear_chess[y - 1][x - 1] = chess[y - 1][x - 1]
+                    the_game[y - 1][x - 1] = chess[y - 1][x - 1]
+            if (x < game_X_size - 1 and y < game_Y_size - 1):
+                if (chess[y + 1][x + 1] != ' ' and chess[y + 1][x + 1] != '💣'):
+                    btn[y + 1][x + 1].config(text=chess[y + 1][x + 1], bg='GhostWhite')
+                    appear_chess[y + 1][x + 1] = chess[y + 1][x + 1]
+                    the_game[y + 1][x + 1] = chess[y + 1][x + 1]
+            if (x > 0 and y < game_Y_size - 1):
+                if (chess[y + 1][x - 1] != ' ' and chess[y + 1][x - 1] != '💣'):
+                    btn[y + 1][x - 1].config(text=chess[y + 1][x - 1], bg='GhostWhite')
+                    appear_chess[y + 1][x - 1] = chess[y + 1][x - 1]
+                    the_game[y + 1][x - 1] = chess[y + 1][x - 1]
+            if (y > 0 and x < game_X_size - 1):
+                if (chess[y - 1][x + 1] != ' ' and chess[y - 1][x + 1] != '💣'):
+                    btn[y - 1][x + 1].config(text=chess[y - 1][x + 1], bg='GhostWhite')
+                    appear_chess[y - 1][x + 1] = chess[y - 1][x + 1]
+                    the_game[y - 1][x + 1] = chess[y - 1][x + 1]
+
 '''========================================================='''
 begin=0
 def play(event,x,y):
