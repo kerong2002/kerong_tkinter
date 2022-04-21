@@ -1,27 +1,41 @@
 #2022-04-19 陳科融
 #踩地雷
 from tkinter import *
-from random import randint
+from threading import Timer
 import random
 window=Tk()
 window.title("bomb")
 window.configure(bg='skyblue')
-window.geometry("800x600+700+70")
+window.geometry("510x670+400+70")
 bomb_number=10  #炸彈
 game_Y_size=9   #高度
 game_X_size=9   #寬度
-btn=[]
-number_list=[]
-the_game=[]
-appear_chess=[]
-appear_flag=[]
-can_play=True
-time_end=False
+btn=[]          #按鈕
+number_list=[]  #數組
+the_game=[]     #遊玩結果
+appear_chess=[] #出現的chess
+appear_flag=[] #出現的旗幟
+can_play=True   #開始條件
+time_end=False  #結束條件
 bomb_number_cnt=bomb_number #剩餘
-win_answer=[]
-is_win=False
-stop_now=False
-can_paly=0
+win_answer=[]   #勝利條件
+is_win=False    #是否勝利
+stop_now=False  #是否強制暫停
+'''=========================<mune>=============================='''
+def show(i):
+    print('help')
+def menu_operation():
+    smile_do(True)
+menuBar = Menu(window)
+menuFile =Menu(menuBar, tearoff=False)
+menuBar.add_cascade(label='set',font=('Inconsolata',10), menu=menuFile)        #menu set
+menuFile.add_command(label='New game',font=('Inconsolata',10), command=menu_operation)#新局
+menuFile.add_command(label='Exit',font=('Inconsolata',10), command=window.destroy)#清除
+menuHelp = Menu(menuBar, tearoff=False)
+menuBar.add_cascade(label='help',font=('Inconsolata',10), menu=menuHelp)
+menuHelp.add_command(label='Help',font=('Inconsolata',10), command=lambda: show('Help'))
+window.config(menu=menuBar)
+'''=========================<清空配置>============================'''
 def clear_array():
     del chess[:]
     del the_game[:]
@@ -30,6 +44,7 @@ def clear_array():
     del win_answer[:]
     del bomb[:]
     del btn[:]
+'''=========================<笑臉功能>============================'''
 done_do_time=False
 def smile_do(event):
     global begin,can_play,counter,time_end,bomb_number_cnt,can_paly,begin,done_do_time,is_win
@@ -56,8 +71,7 @@ def smile_do(event):
     set_button()
     done_do_time = False
     print('smile')
-'''=========================<計時器>========================='''
-from threading import Timer
+'''=========================<計時器>============================'''
 t = None
 counter = 0
 def change_time():
@@ -94,6 +108,7 @@ def change_time():
         t.start()
     elif(time_end==True):
         return
+'''=========================<暫停>============================'''
 def pause():
     global window
     global t
@@ -116,7 +131,6 @@ def new_set_chess():
             appear_flag[y].append('')
             win_answer[y].append('')
 new_set_chess()
-'''=========================================================='''
 '''==========================<炸彈>==========================='''
 bomb=[]
 def boom_set():
@@ -126,7 +140,6 @@ def boom_set():
         x=int(int(bomb[0][i])%game_X_size)
         chess[int(y)][int(x)]='💣'
 boom_set()
-'''=========================================================='''
 '''========================<建置數字>========================='''
 def new_set_number():
     for y in range(game_Y_size):
@@ -150,9 +163,7 @@ def new_set_number():
                 if(found!=0):
                     chess[y][x]=str(found)
 new_set_number()
-'''=========================================================='''
 '''================<搜尋空白演算法>============================'''
-
 def  flood_fill(y,x):
     if(x < game_X_size-1):
         if(chess[y][x+1] == ' ' and appear_chess[y][x+1]!=' '):
@@ -275,7 +286,7 @@ def  flood_fill(y,x):
                     appear_chess[y - 1][x + 1] = chess[y - 1][x + 1]
                     the_game[y - 1][x + 1] = chess[y - 1][x + 1]
 
-'''========================================================='''
+'''=========================<開始遊玩觸發>============================'''
 begin=0
 def play(event,x,y):
     global t,begin,time_end,appear_flag,bomb_number_cnt,can_paly
@@ -305,10 +316,11 @@ def play(event,x,y):
                             btn[ay][ax].config(text=chess[ay][ax],bg='GhostWhite')
             btn[y][x].config(text=chess[y][x], bg='Red')
             change_smile.set('😱')
-    # print(appear_chess)
+'''=========================<裝飾器>============================'''
 def handlerAdaptor(fun, **kwds):
 	'''事件處裡函數的配飾器，相當於一個中介'''
 	return lambda event,fun=fun,kwds=kwds: fun(event, **kwds)
+'''=========================<旗幟處發>============================'''
 flag_cnt=0
 def flag(event,x,y):
     global appear_flag,bomb_number_cnt
@@ -325,6 +337,7 @@ def flag(event,x,y):
             the_game[y][x]=' '
             bomb_number_cnt += 1
             remain_bomb.set(str(bomb_number_cnt))
+'''=========================<勝利數組配置>============================'''
 def win_set():
     for y in range(game_Y_size):
         print(chess[y])
@@ -333,22 +346,25 @@ def win_set():
             if(chess[y][x]!='💣'):
                 win_answer[y][x]=chess[y][x]
 win_set()
+'''=========================<初始設定>============================'''
 change_smile=StringVar()
 change_smile.set('🙂')
 remain_bomb=StringVar()
 remain_bomb.set(str(bomb_number_cnt))
 labelText = StringVar()
 labelText.set(str(counter))
+'''=========================<新遊戲設定>============================'''
 def new_play_game():
-    Label(window, textvariable=remain_bomb,font='160',height='3',bg='skyblue').grid(row = 0,column =0)
-    Label(window, textvariable=labelText,font='160',height='3',bg='skyblue').grid(row = 0,column = game_X_size-1)
+    Label(window, textvariable=remain_bomb,font='160',height='3',bg='skyblue').place(y = 10,x = 30)
+    Label(window, textvariable=labelText,font='160',height='3',bg='skyblue').place(y = 10,x = 460)
     smile=Button(window,textvariable=change_smile,font='160',bg='Snow')
     smile.bind("<Button-1>",smile_do)#左鍵
-    smile.grid(row = 0,column = int(game_X_size/2))
+    smile.place(y = 22,x = int(game_X_size/2)*58)
 new_play_game()
+'''=========================<左右鍵搜尋>============================'''
 def search(event,x,y):
-    global appear_flag,game_Y_size,game_X_size
-    if(chess[y][x]==' '):
+    global appear_flag,game_Y_size,game_X_size,appear_chess
+    if(chess[y][x]==' 'or appear_chess[y][x]=='' ):
         return
     pick_number=int(chess[y][x])
     search_flag=0
@@ -379,15 +395,16 @@ def search(event,x,y):
                     continue
                 if(appear_chess[i][j]==''):
                     play(True,j,i)
+'''=========================<配置按鈕>============================'''
 def set_button():
     for y in range(game_Y_size):
         btn.append([])
         for x in range(game_X_size):
-            btn[y].append(Button(window,width = 5,height = 3))
+            btn[y].append(Button(window,width = 6,height = 3, relief=RAISED ))
             btn[y][x].bind("<Button-3>",handlerAdaptor(flag,x=x,y=y))
             btn[y][x].bind("<Button-1>",handlerAdaptor(play,x=x,y=y))
             btn[y][x].bind("<Button-2>", handlerAdaptor(search, x=x, y=y))
             btn[y][x].config(text=' ', bg='LightPink', fg='black')
-            btn[y][x].grid(row = y+5,column = x)
+            btn[y][x].place(y = 57*y+80,x = 52*x+20)
 set_button()
 window.mainloop()
