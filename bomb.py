@@ -30,9 +30,15 @@ def clear_array():
     del win_answer[:]
     del bomb[:]
     del btn[:]
+done_do_time=False
 def smile_do(event):
-    global begin,can_play,counter,time_end,bomb_number_cnt,can_paly
+    global begin,can_play,counter,time_end,bomb_number_cnt,can_paly,begin,done_do_time,is_win
+    pause()
+    if(event):
+        done_do_time=True
     can_paly=0
+    is_win = False
+    begin = 1
     bomb_number_cnt=bomb_number
     remain_bomb.set(str(bomb_number_cnt))
     begin=0
@@ -48,6 +54,7 @@ def smile_do(event):
     win_set()
     new_play_game()
     set_button()
+    done_do_time = False
     print('smile')
 '''=========================<計時器>========================='''
 from threading import Timer
@@ -59,8 +66,13 @@ def change_time():
     global counter
     global t
     global is_win
+    global done_do_time
+    # print(done_do_time,stop_now,sep='.')
+    if(done_do_time==True):
+        return
     if(stop_now==True):
         return
+    # print(time_end,is_win,can_play,sep=',')
     if(time_end==False and is_win==False and can_paly==1):
         counter = counter + 1
         labelText.set(str(counter))
@@ -71,11 +83,22 @@ def change_time():
         if(cnt_win==game_Y_size):
             is_win=True
             change_smile.set('😎')
+            for ay in range(game_Y_size):
+                for ax in range(game_X_size):
+                    if(chess[ay][ax]=='💣'):
+                        appear_flag[ay][ax]='🚩'
+                        the_game[ay][ax]='🚩'
+                        btn[ay][ax].config(text='🚩',bg='LightPink')
             return
         t = Timer(1, change_time)
         t.start()
     elif(time_end==True):
         return
+def pause():
+    global window
+    global t
+    t.cancel()
+
 '''========================<建置棋盤>========================='''
 chess=[]
 def new_set_chess():
@@ -111,8 +134,6 @@ def new_set_number():
             if(chess[y][x]=='💣'):
                 continue
             elif(chess[y][x]!='💣'):
-                Y_start=0
-                X_start=0
                 found=0
                 for i in range(y-1,y+2):
                     if(i<0):
@@ -258,12 +279,12 @@ def  flood_fill(y,x):
 begin=0
 def play(event,x,y):
     global t,begin,time_end,appear_flag,bomb_number_cnt,can_paly
-    if(event):
+    if(event  and appear_chess[y][x]==''):
         can_paly=1
-    if(begin==0):#開始計數
+    if(begin==0 and can_paly==1):#開始計數
+        begin=1
         t = Timer(1, change_time)
         t.start()
-        begin=1
     global can_play,time_end
     if(can_play==True and appear_flag[y][x]!='🚩'):
         if(chess[y][x]!='💣'):
