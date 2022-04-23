@@ -12,6 +12,7 @@ game_chess=[]   #紀錄出現的棋子
 white_or_black = 0
 win_text=StringVar()
 win_text.set('')
+can_not_play=False
 '''=====<初始化場地>======'''
 def set_game_chess():
     for y in range(game_Y_size):
@@ -22,12 +23,15 @@ set_game_chess()
 '''=======<遊玩>========='''
 def play(x,y):
     global white_or_black,game_chess
+    print(can_not_play)
+    if(can_not_play==True):
+        return
     if(white_or_black==0 and game_chess[y][x]==' '):
-        btn[y][x].config(text='⚪')
+        btn[y][x].config(text='⚫',fg='white')
         game_chess[y][x]='⚪'
         white_or_black=1
     elif(white_or_black==1 and game_chess[y][x]==' '):
-        btn[y][x].config(text='⚫')
+        btn[y][x].config(text='⚫',fg='black')
         game_chess[y][x] = '⚫'
         white_or_black = 0
     # ================<<橫的>>==========================
@@ -119,16 +123,17 @@ def play(x,y):
                     return
 #================<終止>====================
 def exit():
-    for y in range(game_Y_size):
-        for x in range(game_X_size):
-            btn[y][x].config(state="disabled")
+    global can_not_play
+    can_not_play = True
+    # for y in range(game_Y_size):
+    #     for x in range(game_X_size):
+    #         btn[y][x].config(state="disabled")
 def clear_button(event):
     del game_chess[:]
+    global can_not_play
+    can_not_play = False
     set_game_chess()
     win_text.set(' ')
-    for y in range(game_Y_size):
-        for x in range(game_X_size):
-            btn[y][x].config(state='normal')
     set_chess_button()
 def restart():
     rest = Button(window, text="restart", width=5, height=2)

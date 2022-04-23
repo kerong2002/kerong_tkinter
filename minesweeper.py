@@ -38,7 +38,7 @@ window.config(menu=menuBar)
 '''=========================<數字顏色>============================'''
 text_color={
 ' ':'black',
-'💣':'black',
+'💣':'#f712fc',
 "1" : 'Blue',
 '2':'#01ab30',
 '3':'#ff0d0d',
@@ -115,6 +115,7 @@ def change_time():
                     if(chess[ay][ax]=='💣'):
                         appear_flag[ay][ax]='🚩'
                         the_game[ay][ax]='🚩'
+                        remain_bomb.set('0')
                         btn[ay][ax].config(text='🚩')
             return
         t = Timer(1, change_time)
@@ -325,8 +326,9 @@ def play(event,x,y):
                     if(the_game[ay][ax]=='🚩' and chess[ay][ax]!='💣'):
                         btn[ay][ax].config(text='❌',bg='Magenta',fg='red')
                     elif(chess[ay][ax]=='💣'):
+                        btn[ay][ax].config(bg='#f0f0ee')
                         if(the_game[ay][ax]!='🚩'):
-                            btn[ay][ax].config(text=chess[ay][ax],bg='#f0f0ee',fg='black')
+                            btn[ay][ax].config(text=chess[ay][ax],fg='black')
             btn[y][x].config(text=chess[y][x], bg='Red')
             change_smile.set('😱')
 '''=========================<裝飾器>============================'''
@@ -336,10 +338,12 @@ def handlerAdaptor(fun, **kwds):
 '''=========================<旗幟處發>============================'''
 flag_cnt=0
 def flag(event,x,y):
-    global appear_flag,bomb_number_cnt
+    global appear_flag,bomb_number_cnt,is_win
+    if(is_win==True):
+        return
     if (can_play == True and appear_chess[y][x]==''):
         if(appear_flag[y][x]==''):
-            btn[y][x].config(text='🚩',fg='black')
+            btn[y][x].config(text='🚩',fg='red')
             appear_flag[y][x]='🚩'
             the_game[y][x]='🚩'
             bomb_number_cnt-=1
@@ -414,11 +418,11 @@ def set_button():
     for y in range(game_Y_size):
         btn.append([])
         for x in range(game_X_size):
-            btn[y].append(Button(window,width = 6,height = 3, relief='raised' ))
+            btn[y].append(Button(window,width = 5,height = 3, relief='raised' ))
             btn[y][x].bind("<Button-3>",handlerAdaptor(flag,x=x,y=y))
             btn[y][x].bind("<Button-1>",handlerAdaptor(play,x=x,y=y))
             btn[y][x].bind("<Button-2>", handlerAdaptor(search, x=x, y=y))
-            btn[y][x].config(text=' ', bg='#c6c6d3',fg=text_color[chess[y][x]])
+            btn[y][x].config(text=' ',font='35', bg='#c6c6d3',fg=text_color[chess[y][x]])
             btn[y][x].place(y = 57*y+80,x = 52*x+20)
 set_button()
 window.mainloop()
