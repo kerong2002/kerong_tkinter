@@ -220,7 +220,7 @@ def  flood_fill(y,x):
             the_game[y][x-1] = chess[y][x-1]
             flood_fill(y,x-1)
         elif (chess[y][x-1]!= ' ' and chess[y][x-1]!= '💣'):
-            btn[y][x-1].config(text=chess[y][x-1], bg='#f0f0ee')
+            btn[y][x-1].config(text=chess[y][x-1], bg='#f0f0ee', fg=text_color[chess[y][x-1]])
             appear_chess[y][x-1] = chess[y][x-1]
             the_game[y][x - 1] = chess[y][x - 1]
             if (y > 0 and x > 0):
@@ -250,7 +250,7 @@ def  flood_fill(y,x):
             the_game[y + 1][x] = chess[y + 1][x]
             flood_fill(y + 1, x)
         elif (chess[y + 1][x]!= ' ' and chess[y + 1][x]!= '💣'):
-            btn[y + 1][x].config(text=chess[y + 1][x], bg='#f0f0ee')
+            btn[y + 1][x].config(text=chess[y + 1][x], bg='#f0f0ee', fg=text_color[chess[y + 1][x]])
             appear_chess[y + 1][x]= chess[y + 1][x]
             the_game[y + 1][x] = chess[y + 1][x]
             if (y > 0 and x > 0):
@@ -280,7 +280,7 @@ def  flood_fill(y,x):
             the_game[y - 1][x] = chess[y - 1][x]
             flood_fill(y-1,x)
         elif (chess[y-1][x]!= ' ' and chess[y-1][x]!= '💣'):
-            btn[y-1][x].config(text=chess[y-1][x], bg='#f0f0ee')
+            btn[y-1][x].config(text=chess[y-1][x], bg='#f0f0ee', fg=text_color[chess[y-1][x]])
             appear_chess[y-1][x]= chess[y-1][x]
             the_game[y - 1][x] = chess[y - 1][x]
             if (y > 0 and x > 0):
