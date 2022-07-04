@@ -24,6 +24,7 @@ win_answer=[]   #勝利條件
 is_win=False    #是否勝利
 stop_now=False  #是否強制暫停
 trigger=False   #觸發判定
+
 '''=========================<外掛>============================'''
 hack_done=False
 def hack():
@@ -572,10 +573,12 @@ def  flood_fill(y,x):
                     the_game[y - 1][x + 1] = chess[y - 1][x + 1]
 '''=========================<開始遊玩觸發>============================'''
 begin=0
-def play(event,x,y):
-    global t,begin,time_end,appear_flag,bomb_number_cnt,can_paly,trigger,is_win,savex,savey
+def play(event,x,y,other):
+    global t,begin,time_end,appear_flag,bomb_number_cnt,can_paly,trigger,is_win,savex,savey,can_play
     trigger = True
     if(is_win==True):
+        return
+    if(time_end==True):
         return
     if (appear_flag[y][x] == '🚩'): #確保點選那個方塊不是旗幟
         return
@@ -585,46 +588,113 @@ def play(event,x,y):
         begin=1
         t = Timer(1, change_time)
         t.start()
-    global can_play,time_end
-    if(can_play==True and appear_flag[y][x]!='🚩'):#採到的地方不是旗幟，開始做判定
-        if(chess[y][x]!='💣'):
-            btn[y][x].config(text=chess[y][x],bg='#f0f0ee',fg=text_color[chess[y][x]])
-            appear_chess[y][x]=chess[y][x]
-            change_smile.set('🙂')
-            # 特別處理
-            if(chess[y][x]==' '):
-                flood_fill(y,x)
-                '''================<特殊空白情況>======================='''
-                save_x_y=[]
-                for i in range(len(savex)):
-                    save_x_y.append(str(savex[i])+','+str(savey[i]))
-                unique_set =set(save_x_y)       #去除重複
-                unique_list=list(unique_set)    #去完重複變回陣列
-                unique_x=[]
-                unique_y=[]
-                for i in unique_list:
-                    unique_x.append(i.split(",")[0])    #分割X
-                    unique_y.append(i.split(",")[1])    #分割y
-                for i in range(len(unique_x)):
-                    if (appear_chess[int(unique_y[i])][int(unique_x[i])] == ''):
-                        play(True,int(unique_x[i]),int(unique_y[i]))
-                del save_x_y[:]
-                del unique_x[:]
-                del unique_y[:]
-                del savex[:]
-                del savey[:]
-        elif(chess[y][x]=='💣'): #採到炸彈處理
-            time_end=True
-            can_play=False
-            for ay in range(game_Y_size):
-                for ax in range(game_X_size):
-                    if(the_game[ay][ax]=='🚩' and chess[ay][ax]!='💣'):
-                        btn[ay][ax].config(text='❌',bg='Magenta',fg='red') #標示出旗幟插到不是炸彈位置的地方
-                    elif(chess[ay][ax]=='💣'):
-                        if(the_game[ay][ax]!='🚩'):
-                            btn[ay][ax].config(bg='#f0f0ee',text=chess[ay][ax],fg='black')#標示出炸彈
-            btn[y][x].config(text=chess[y][x], bg='Red')#採到炸彈那格會設定紅色
-            change_smile.set('😱')
+    if (appear_flag[y][x] != ' ' and appear_chess[y][x] != '' and chess[y][x] != ' '):
+        for yy in range(y - 1, y + 2, 1):
+            if (yy > game_Y_size - 1 or yy < 0):
+                continue
+            for xx in range(x - 1, x + 2, 1):
+                if (xx > game_X_size - 1 or xx < 0):
+                    continue
+                if (appear_chess[yy][xx] == '' and appear_flag[yy][xx]!='🚩'):
+                    btn[yy][xx].config(text=' ', bg='#c6c6d3')
+    if(other==1):
+        # if(check_x!=event.x and check_y!=event.y):
+    # print('new=({},{}),old=({},{})'.format(event.x,event.y,check_x,check_y))
+    #     if(check_y!=y and check_x!=x):
+    #         print('not')
+        if(can_play==True and appear_flag[y][x]!='🚩'):#採到的地方不是旗幟，開始做判定
+            if(chess[y][x]!='💣'):
+                # if (appear_chess[y][x] !='' and appear_chess[y][x]!=' '):
+                #     print('check')
+                btn[y][x].config(text=chess[y][x],bg='#f0f0ee',fg=text_color[chess[y][x]])
+                appear_chess[y][x]=chess[y][x]
+                change_smile.set('🙂')
+                # 特別處理
+                if(chess[y][x]==' '):
+                    flood_fill(y,x)
+                    '''================<特殊空白情況>======================='''
+                    save_x_y=[]
+                    for i in range(len(savex)):
+                        save_x_y.append(str(savex[i])+','+str(savey[i]))
+                    unique_set =set(save_x_y)       #去除重複
+                    unique_list=list(unique_set)    #去完重複變回陣列
+                    unique_x=[]
+                    unique_y=[]
+                    for i in unique_list:
+                        unique_x.append(i.split(",")[0])    #分割X
+                        unique_y.append(i.split(",")[1])    #分割y
+                    for i in range(len(unique_x)):
+                        if (appear_chess[int(unique_y[i])][int(unique_x[i])] == ''):
+                            play(True,int(unique_x[i]),int(unique_y[i]),1)
+                    del save_x_y[:]
+                    del unique_x[:]
+                    del unique_y[:]
+                    del savex[:]
+                    del savey[:]
+            elif(chess[y][x]=='💣'): #採到炸彈處理
+                time_end=True
+                can_play=False
+                for ay in range(game_Y_size):
+                    for ax in range(game_X_size):
+                        if(the_game[ay][ax]=='🚩' and chess[ay][ax]!='💣'):
+                            btn[ay][ax].config(text='❌',bg='Magenta',fg='red') #標示出旗幟插到不是炸彈位置的地方
+                        elif(chess[ay][ax]=='💣'):
+                            if(the_game[ay][ax]!='🚩'):
+                                btn[ay][ax].config(bg='#f0f0ee',text=chess[ay][ax],fg='black')#標示出炸彈
+                btn[y][x].config(text=chess[y][x], bg='Red')#採到炸彈那格會設定紅色
+                change_smile.set('😱')
+    else:
+        if(event.x >=-5 and event.x <= 40) and (event.y >= -5 and event.y <= 33):
+            if (can_play == True and appear_flag[y][x] != '🚩'):  # 採到的地方不是旗幟，開始做判定
+                if (chess[y][x] != '💣'):
+                    if (appear_flag[y][x] != ' ' and appear_chess[y][x] != '' and chess[y][x] != ' '):
+                        for yy in range(y - 1, y + 2, 1):
+                            if (yy > game_Y_size - 1 or yy < 0):
+                                continue
+                            for xx in range(x - 1, x + 2, 1):
+                                if (xx > game_X_size - 1 or xx < 0):
+                                    continue
+                                if(appear_chess[yy][xx]=='' and appear_flag[yy][xx]!='🚩'):
+                                    btn[yy][xx].config(text=' ', bg='#c6c6d3')
+                    # if (appear_chess[y][x] !='' and appear_chess[y][x]!=' '):
+                    #     print('check')
+                    btn[y][x].config(text=chess[y][x], bg='#f0f0ee', fg=text_color[chess[y][x]])
+                    appear_chess[y][x] = chess[y][x]
+                    change_smile.set('🙂')
+                    # 特別處理
+                    if (chess[y][x] == ' '):
+                        flood_fill(y, x)
+                        '''================<特殊空白情況>======================='''
+                        save_x_y = []
+                        for i in range(len(savex)):
+                            save_x_y.append(str(savex[i]) + ',' + str(savey[i]))
+                        unique_set = set(save_x_y)  # 去除重複
+                        unique_list = list(unique_set)  # 去完重複變回陣列
+                        unique_x = []
+                        unique_y = []
+                        for i in unique_list:
+                            unique_x.append(i.split(",")[0])  # 分割X
+                            unique_y.append(i.split(",")[1])  # 分割y
+                        for i in range(len(unique_x)):
+                            if (appear_chess[int(unique_y[i])][int(unique_x[i])] == ''):
+                                play(True, int(unique_x[i]), int(unique_y[i]), 1)
+                        del save_x_y[:]
+                        del unique_x[:]
+                        del unique_y[:]
+                        del savex[:]
+                        del savey[:]
+                elif (chess[y][x] == '💣'):  # 採到炸彈處理
+                    time_end = True
+                    can_play = False
+                    for ay in range(game_Y_size):
+                        for ax in range(game_X_size):
+                            if (the_game[ay][ax] == '🚩' and chess[ay][ax] != '💣'):
+                                btn[ay][ax].config(text='❌', bg='Magenta', fg='red')  # 標示出旗幟插到不是炸彈位置的地方
+                            elif (chess[ay][ax] == '💣'):
+                                if (the_game[ay][ax] != '🚩'):
+                                    btn[ay][ax].config(bg='#f0f0ee', text=chess[ay][ax], fg='black')  # 標示出炸彈
+                    btn[y][x].config(text=chess[y][x], bg='Red')  # 採到炸彈那格會設定紅色
+                    change_smile.set('😱')
 '''=========================<裝飾器>============================'''
 def handlerAdaptor(fun, **kwds):
 	'''事件處裡函數的配飾器，相當於一個中介'''
@@ -680,7 +750,7 @@ def new_play_game():
     smile.place(relx=0.5,rely=0.5,anchor="center")
     frame2.place(x=15,y=20)
 '''=========================<滑鼠中鍵搜尋>============================'''
-def search(event,x,y):
+def search(event,x,y,check_search):
     global appear_flag,game_Y_size,game_X_size,appear_chess,is_win
     if(time_end==True or is_win==True):
         return
@@ -714,13 +784,31 @@ def search(event,x,y):
                 if(i==y and j==x):
                     continue
                 if(appear_chess[i][j]==''):
-                    play(True,j,i)
+                    play(True,j,i,other=1)
 '''===============<臉部表情oops>========================'''
 def oops(event,x,y):
     global  time_end,is_win
     if (time_end==True or is_win==True): #確保點選那個方塊不是旗幟
         return
     change_smile.set('😮')  #oops
+check_x=-1
+check_y=-1
+def call_back(event,x,y,other):
+    global check_x,check_y
+    check_x=event.x     #紀錄位置
+    check_y=event.y     #紀錄位置
+    if (can_play == True):
+        # print('done')
+        if (appear_flag[y][x] != ' ' and appear_chess[y][x] != '' and chess[y][x] != ' '):
+            # print('is number')
+            for yy in range(y - 1, y + 2,1):
+                if(yy>game_Y_size-1 or yy<0):
+                    continue
+                for xx in range(x - 1, x + 2,1):
+                    if (xx > game_X_size - 1 or xx<0):
+                        continue
+                    if (appear_chess[yy][xx] == '' and appear_flag[yy][xx]!='🚩'):
+                        btn[yy][xx].config(text=' ', bg='#f0f0ee')
 '''=========================<配置按鈕>============================'''
 def set_button():
     global text_color,test_Frame,frame1
@@ -731,10 +819,11 @@ def set_button():
         for x in range(game_X_size):
             btn[y].append(Button(frame1,width = 3,height = 1, relief=RAISED,anchor='center'))
             btn[y][x].bind("<Button-1>", handlerAdaptor(oops, x=x, y=y))          #滑鼠左鍵觸發
-            btn[y][x].bind("<ButtonRelease-1>",handlerAdaptor(play,x=x,y=y))      #滑鼠左鍵觸發
-            btn[y][x].bind("<Button-2>", handlerAdaptor(search, x=x, y=y))        #滑鼠中鍵觸發
-            btn[y][x].bind("<Button-1><Button-3>", handlerAdaptor(search, x=x, y=y))  # 滑鼠左右鍵觸發
-            btn[y][x].bind("<Button-3><Button-1>", handlerAdaptor(search, x=x, y=y))  # 滑鼠左右鍵觸發
+            btn[y][x].bind("<ButtonRelease-1>",handlerAdaptor(play,x=x,y=y,other=0))      #滑鼠左鍵觸發
+            btn[y][x].bind("<ButtonPress-1>",handlerAdaptor(call_back,x=x,y=y,other=0))   #紀錄滑鼠左鍵處發位置
+            btn[y][x].bind("<Button-2>", handlerAdaptor(search, x=x, y=y,check_search=1))        #滑鼠中鍵觸發
+            btn[y][x].bind("<Button-1><Button-3>", handlerAdaptor(search, x=x, y=y,check_search=1))  # 滑鼠左右鍵觸發
+            btn[y][x].bind("<Button-3><Button-1>", handlerAdaptor(search, x=x, y=y,check_search=1))  # 滑鼠左右鍵觸發
             btn[y][x].bind("<ButtonRelease-3>", handlerAdaptor(flag, x=x, y=y))   #滑鼠右鍵觸發
             btn[y][x].config(text=' ',font='30', bg='#c6c6d3',fg=text_color[chess[y][x]])
             btn[y][x].grid(row=y,column=x)

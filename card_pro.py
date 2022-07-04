@@ -3,7 +3,7 @@
 from tkinter import *
 from random import randint
 window=Tk()
-window.title("Tic-tac-toe")
+window.title("match")
 window.configure(bg='skyblue')
 window.geometry("800x700+400+100")
 pair=8
